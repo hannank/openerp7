@@ -340,7 +340,7 @@ class email_template(osv.osv):
                 ctx['lang'] = self.render_template(cr, uid, template.lang, template.model, res_id, context)
             service = netsvc.LocalService(report_service)
             (result, format) = service.create(cr, uid, [res_id], {'model': template.model}, ctx)
-            result = base64.b64encode(result)
+            #result = base64.b64encode(result)
             if not report_name:
                 report_name = report_service
             ext = "." + format

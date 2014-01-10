@@ -268,7 +268,7 @@ class rml_parse(object):
                 d = obj._field.digits[1] or DEFAULT_DIGITS
         return d
 
-    def formatLang(self, value, digits=None, date=False, date_time=False, grouping=True, monetary=False, dp=False, currency_obj=False):
+    def formatLang(self, value, digits=None, date=False, date_time=False, grouping=True, monetary=False, dp=False, currency_obj=False, rstrip=False):
         """
             Assuming 'Account' decimal.precision=3:
                 formatLang(value) -> digits=2 (default)
@@ -320,6 +320,8 @@ class rml_parse(object):
                 res='%s %s'%(res,currency_obj.symbol)
             elif currency_obj and currency_obj.position == 'before':
                 res='%s %s'%(currency_obj.symbol, res)
+        if rstrip:
+            res=res.rstrip("0").rstrip(".").rstrip(",")
         return res
 
     def display_address(self, address_browse_record):
