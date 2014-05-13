@@ -1,0 +1,73 @@
+diff --git openerp/addons/web/static/src/js/views.js openerp/addons/web/static/src/js/views.js
+index 21ff627..374a600 100644
+--- openerp/addons/web/static/src/js/views.js
++++ openerp/addons/web/static/src/js/views.js
+@@ -484,25 +484,50 @@ instance.web.ActionManager = instance.web.Widget.extend({
+                 return;
+             }
+ 
+-            var c = instance.webclient.crashmanager;
+-            return $.Deferred(function (d) {
+-                self.session.get_file({
+-                    url: '/web/report',
+-                    data: {action: JSON.stringify(action)},
+-                    complete: instance.web.unblockUI,
+-                    success: function(){
+-                        if (!self.dialog) {
+-                            options.on_close();
+-                        }
+-                        self.dialog_stop();
+-                        d.resolve();
+-                    },
+-                    error: function () {
+-                        c.rpc_error.apply(c, arguments);
+-                        d.reject();
++            var Report = new instance.web.Model("ir.actions.report.xml");
++            var paction = "";
++            Report.call('behaviour_by_name', [action.report_name]
++                        ).then(function (result) {
++                  // do something with change_password result
++              paction = result[Object.keys(result)[0]].action;
++              var c = instance.webclient.crashmanager;
++              if(paction == 'server'){
++                /*
++                    instance.session.rpc('/web/report', {
++                      datas: action.datas,
++                      report_name: action.report_name,
++                      type: action.type,
++                      context: action.context
++                    });
++                */
++                  $.post("/web/report",{action: JSON.stringify(action), session_id: instance.session.session_id, token: 10});
++                    if (!self.dialog) {
++                        options.on_close();
+                     }
+-                })
+-            });
++                    self.dialog_stop();
++                    instance.web.unblockUI();
++              }
++              else {
++                return $.Deferred(function (d) {
++                    self.session.get_file({
++                        url: '/web/report',
++                        data: {action: JSON.stringify(action)},
++                        complete: instance.web.unblockUI,
++                        success: function(){
++                            if (!self.dialog) {
++                                options.on_close();
++                            }
++                            self.dialog_stop();
++                            d.resolve();
++                        },
++                        error: function () {
++                            c.rpc_error.apply(c, arguments);
++                            d.reject();
++                        }
++                    })
++                });
++              }
++          });
+         });
+     },
+     ir_actions_act_url: function (action) {
