@@ -22,9 +22,9 @@
 import math
 import re
 
-from _common import rounding
+from _common import ceiling
 
-from openerp import tools
+from openerp import tools, SUPERUSER_ID
 from openerp.osv import osv, fields
 from openerp.tools.translate import _
 
@@ -178,7 +178,7 @@ class product_uom(osv.osv):
                 return qty
         amount = qty / from_unit.factor
         if to_unit:
-            amount = rounding(amount * to_unit.factor, to_unit.rounding)
+            amount = ceiling(amount * to_unit.factor, to_unit.rounding)
         return amount
 
     def _compute_price(self, cr, uid, from_uom_id, price, to_uom_id=False):
@@ -703,7 +703,7 @@ class product_product(osv.osv):
 
         res = {}
         product_uom_obj = self.pool.get('product.uom')
-        for product in self.browse(cr, uid, ids, context=context):
+        for product in self.browse(cr, SUPERUSER_ID, ids, context=context):
             res[product.id] = product[ptype] or 0.0
             if ptype == 'list_price':
                 res[product.id] = (res[product.id] * (product.price_margin or 1.0)) + \
@@ -728,11 +728,7 @@ class product_product(osv.osv):
         if not default:
             default = {}
 
-        # Craft our own `<name> (copy)` in en_US (self.copy_translation()
-        # will do the other languages).
-        context_wo_lang = context.copy()
-        context_wo_lang.pop('lang', None)
-        product = self.read(cr, uid, id, ['name'], context=context_wo_lang)
+        product = self.read(cr, uid, id, ['name'], context=context)
         default = default.copy()
         default.update(name=_("%s (copy)") % (product['name']))
 

@@ -850,18 +850,17 @@ class account_move_line(osv.osv):
                    (tuple(ids), ))
         r = cr.fetchall()
         #TODO: move this check to a constraint in the account_move_reconcile object
+        if len(r) != 1:
+            raise osv.except_osv(_('Error'), _('Entries are not of the same account or already reconciled ! '))
         if not unrec_lines:
             raise osv.except_osv(_('Error!'), _('Entry is already reconciled.'))
         account = account_obj.browse(cr, uid, account_id, context=context)
+        if not account.reconcile:
+            raise osv.except_osv(_('Error'), _('The account is not defined to be reconciled !'))
         if r[0][1] != None:
             raise osv.except_osv(_('Error!'), _('Some entries are already reconciled.'))
 
-        if context.get('fy_closing'):
-            # We don't want to generate any write-off when being called from the
-            # wizard used to close a fiscal year (and it doesn't give us any
-            # writeoff_acc_id).
-            pass
-        elif (not currency_obj.is_zero(cr, uid, account.company_id.currency_id, writeoff)) or \
+        if (not currency_obj.is_zero(cr, uid, account.company_id.currency_id, writeoff)) or \
            (account.currency_id and (not currency_obj.is_zero(cr, uid, account.currency_id, currency))):
             if not writeoff_acc_id:
                 raise osv.except_osv(_('Warning!'), _('You have to provide an account for the write off/exchange difference entry.'))
@@ -1024,10 +1023,14 @@ class account_move_line(osv.osv):
         part_rec_ids = [rec['reconcile_partial_id'][0] for rec in part_recs]
         unlink_ids += rec_ids
         unlink_ids += part_rec_ids
+        all_moves = obj_move_line.search(cr, uid, ['|',('reconcile_id', 'in', unlink_ids),('reconcile_partial_id', 'in', unlink_ids)])
+        all_moves = list(set(all_moves) - set(move_ids))
         if unlink_ids:
             if opening_reconciliation:
                 obj_move_rec.write(cr, uid, unlink_ids, {'opening_reconciliation': False})
             obj_move_rec.unlink(cr, uid, unlink_ids)
+            if len(all_moves) >= 2:
+                obj_move_line.reconcile_partial(cr, uid, all_moves, 'auto',context=context)
         return True
 
     def unlink(self, cr, uid, ids, context=None, check=True):

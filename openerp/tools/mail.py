@@ -30,6 +30,7 @@ import re
 import socket
 import threading
 import time
+from email.utils import getaddresses
 
 from openerp.loglevels import ustr
 
@@ -67,6 +68,15 @@ def html_sanitize(src):
             return ""
         _logger.warning('html_sanitize failed to parse %s' % (src))
         cleaned = '<p>Impossible to parse</p>'
+
+    # MAKO compatibility: $, { and } inside quotes are escaped, preventing correct mako execution
+    cleaned = cleaned.replace('%24', '$')
+    cleaned = cleaned.replace('%7B', '{')
+    cleaned = cleaned.replace('%7D', '}')
+    cleaned = cleaned.replace('%20', ' ')
+    cleaned = cleaned.replace('%5B', '[')
+    cleaned = cleaned.replace('%5D', ']')
+
     return cleaned
 
 
@@ -358,4 +368,9 @@ def email_split(text):
     """ Return a list of the email addresses found in ``text`` """
     if not text:
         return []
-    return re.findall(r'([^ ,<@]+@[^> ,]+)', text)
+    return [addr[1] for addr in getaddresses([text])
+                # getaddresses() returns '' when email parsing fails, and
+                # sometimes returns emails without at least '@'. The '@'
+                # is strictly required in RFC2822's `addr-spec`.
+                if addr[1]
+                if '@' in addr[1]]

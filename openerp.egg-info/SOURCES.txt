@@ -165,6 +165,7 @@ openerp/addons/account/i18n/fa_AF.po
 openerp/addons/account/i18n/fi.po
 openerp/addons/account/i18n/fr.po
 openerp/addons/account/i18n/fr_BE.po
+openerp/addons/account/i18n/fr_CA.po
 openerp/addons/account/i18n/gl.po
 openerp/addons/account/i18n/gu.po
 openerp/addons/account/i18n/he.po
@@ -731,6 +732,7 @@ openerp/addons/account_anglo_saxon/i18n/pt.po
 openerp/addons/account_anglo_saxon/i18n/pt_BR.po
 openerp/addons/account_anglo_saxon/i18n/ro.po
 openerp/addons/account_anglo_saxon/i18n/ru.po
+openerp/addons/account_anglo_saxon/i18n/sk.po
 openerp/addons/account_anglo_saxon/i18n/sl.po
 openerp/addons/account_anglo_saxon/i18n/sq.po
 openerp/addons/account_anglo_saxon/i18n/sr@latin.po
@@ -1286,6 +1288,7 @@ openerp/addons/account_report_company/account_invoice_view.xml
 openerp/addons/account_report_company/account_report_company.py
 openerp/addons/account_report_company/res_partner_view.xml
 openerp/addons/account_report_company/i18n/account_report_company.pot
+openerp/addons/account_report_company/i18n/ar.po
 openerp/addons/account_report_company/i18n/bs.po
 openerp/addons/account_report_company/i18n/cs.po
 openerp/addons/account_report_company/i18n/da.po
@@ -1296,6 +1299,8 @@ openerp/addons/account_report_company/i18n/fr.po
 openerp/addons/account_report_company/i18n/hr.po
 openerp/addons/account_report_company/i18n/hu.po
 openerp/addons/account_report_company/i18n/it.po
+openerp/addons/account_report_company/i18n/mk.po
+openerp/addons/account_report_company/i18n/mn.po
 openerp/addons/account_report_company/i18n/nl.po
 openerp/addons/account_report_company/i18n/pl.po
 openerp/addons/account_report_company/i18n/pt.po
@@ -1303,6 +1308,7 @@ openerp/addons/account_report_company/i18n/pt_BR.po
 openerp/addons/account_report_company/i18n/ro.po
 openerp/addons/account_report_company/i18n/ru.po
 openerp/addons/account_report_company/i18n/sl.po
+openerp/addons/account_report_company/i18n/sv.po
 openerp/addons/account_report_company/i18n/tr.po
 openerp/addons/account_report_company/i18n/vi.po
 openerp/addons/account_report_company/i18n/zh_CN.po
@@ -1387,6 +1393,7 @@ openerp/addons/account_test/i18n/pt_BR.po
 openerp/addons/account_test/i18n/ro.po
 openerp/addons/account_test/i18n/ru.po
 openerp/addons/account_test/i18n/sl.po
+openerp/addons/account_test/i18n/sv.po
 openerp/addons/account_test/i18n/tr.po
 openerp/addons/account_test/i18n/zh_CN.po
 openerp/addons/account_test/report/__init__.py
@@ -1564,6 +1571,7 @@ openerp/addons/analytic_contract_hr_expense/i18n/fr.po
 openerp/addons/analytic_contract_hr_expense/i18n/hr.po
 openerp/addons/analytic_contract_hr_expense/i18n/hu.po
 openerp/addons/analytic_contract_hr_expense/i18n/it.po
+openerp/addons/analytic_contract_hr_expense/i18n/ja.po
 openerp/addons/analytic_contract_hr_expense/i18n/mk.po
 openerp/addons/analytic_contract_hr_expense/i18n/mn.po
 openerp/addons/analytic_contract_hr_expense/i18n/nb.po
@@ -1574,6 +1582,7 @@ openerp/addons/analytic_contract_hr_expense/i18n/pt.po
 openerp/addons/analytic_contract_hr_expense/i18n/pt_BR.po
 openerp/addons/analytic_contract_hr_expense/i18n/ro.po
 openerp/addons/analytic_contract_hr_expense/i18n/sl.po
+openerp/addons/analytic_contract_hr_expense/i18n/sv.po
 openerp/addons/analytic_contract_hr_expense/i18n/tr.po
 openerp/addons/analytic_contract_hr_expense/i18n/zh_CN.po
 openerp/addons/analytic_user_function/__init__.py
@@ -1730,6 +1739,7 @@ openerp/addons/association/i18n/pt.po
 openerp/addons/association/i18n/pt_BR.po
 openerp/addons/association/i18n/ro.po
 openerp/addons/association/i18n/ru.po
+openerp/addons/association/i18n/sk.po
 openerp/addons/association/i18n/sl.po
 openerp/addons/association/i18n/sq.po
 openerp/addons/association/i18n/sr.po
@@ -1821,6 +1831,7 @@ openerp/addons/auth_crypt/i18n/en_GB.po
 openerp/addons/auth_crypt/i18n/es.po
 openerp/addons/auth_crypt/i18n/et.po
 openerp/addons/auth_crypt/i18n/fr.po
+openerp/addons/auth_crypt/i18n/gl.po
 openerp/addons/auth_crypt/i18n/hr.po
 openerp/addons/auth_crypt/i18n/hu.po
 openerp/addons/auth_crypt/i18n/it.po
@@ -1935,6 +1946,7 @@ openerp/addons/auth_oauth_signup/i18n/en_GB.po
 openerp/addons/auth_oauth_signup/i18n/es.po
 openerp/addons/auth_oauth_signup/i18n/et.po
 openerp/addons/auth_oauth_signup/i18n/fr.po
+openerp/addons/auth_oauth_signup/i18n/gl.po
 openerp/addons/auth_oauth_signup/i18n/hr.po
 openerp/addons/auth_oauth_signup/i18n/hu.po
 openerp/addons/auth_oauth_signup/i18n/it.po
@@ -2030,6 +2042,7 @@ openerp/addons/auth_signup/i18n/fr.po
 openerp/addons/auth_signup/i18n/hr.po
 openerp/addons/auth_signup/i18n/hu.po
 openerp/addons/auth_signup/i18n/it.po
+openerp/addons/auth_signup/i18n/ja.po
 openerp/addons/auth_signup/i18n/lt.po
 openerp/addons/auth_signup/i18n/mk.po
 openerp/addons/auth_signup/i18n/mn.po
@@ -2041,6 +2054,7 @@ openerp/addons/auth_signup/i18n/pt_BR.po
 openerp/addons/auth_signup/i18n/ro.po
 openerp/addons/auth_signup/i18n/ru.po
 openerp/addons/auth_signup/i18n/sl.po
+openerp/addons/auth_signup/i18n/sv.po
 openerp/addons/auth_signup/i18n/tr.po
 openerp/addons/auth_signup/i18n/vi.po
 openerp/addons/auth_signup/i18n/zh_CN.po
@@ -2065,6 +2079,7 @@ openerp/addons/base/i18n/am.po
 openerp/addons/base/i18n/ar.po
 openerp/addons/base/i18n/base.pot
 openerp/addons/base/i18n/bg.po
+openerp/addons/base/i18n/bn.po
 openerp/addons/base/i18n/bs.po
 openerp/addons/base/i18n/ca.po
 openerp/addons/base/i18n/cs.po
@@ -2438,6 +2453,7 @@ openerp/addons/base_gengo/i18n/pt.po
 openerp/addons/base_gengo/i18n/pt_BR.po
 openerp/addons/base_gengo/i18n/ro.po
 openerp/addons/base_gengo/i18n/sl.po
+openerp/addons/base_gengo/i18n/sv.po
 openerp/addons/base_gengo/i18n/th.po
 openerp/addons/base_gengo/i18n/tr.po
 openerp/addons/base_gengo/i18n/zh_CN.po
@@ -2532,6 +2548,7 @@ openerp/addons/base_import/i18n/pt_BR.po
 openerp/addons/base_import/i18n/ro.po
 openerp/addons/base_import/i18n/ru.po
 openerp/addons/base_import/i18n/sl.po
+openerp/addons/base_import/i18n/sv.po
 openerp/addons/base_import/i18n/tr.po
 openerp/addons/base_import/i18n/zh_CN.po
 openerp/addons/base_import/security/ir.model.access.csv
@@ -2552,11 +2569,12 @@ openerp/addons/base_import/static/lib/javascript-state-machine/state-machine.js
 openerp/addons/base_import/static/lib/select2/LICENSE
 openerp/addons/base_import/static/lib/select2/README.md
 openerp/addons/base_import/static/lib/select2/release.sh
+openerp/addons/base_import/static/lib/select2/select2-spinner.gif
 openerp/addons/base_import/static/lib/select2/select2.css
+openerp/addons/base_import/static/lib/select2/select2.jquery.json
 openerp/addons/base_import/static/lib/select2/select2.js
 openerp/addons/base_import/static/lib/select2/select2.png
 openerp/addons/base_import/static/lib/select2/select2x2.png
-openerp/addons/base_import/static/lib/select2/spinner.gif
 openerp/addons/base_import/static/src/css/import.css
 openerp/addons/base_import/static/src/js/import.js
 openerp/addons/base_import/static/src/xml/import.xml
@@ -3012,6 +3030,7 @@ openerp/addons/contacts/i18n/es_CO.po
 openerp/addons/contacts/i18n/et.po
 openerp/addons/contacts/i18n/fi.po
 openerp/addons/contacts/i18n/fr.po
+openerp/addons/contacts/i18n/gl.po
 openerp/addons/contacts/i18n/he.po
 openerp/addons/contacts/i18n/hr.po
 openerp/addons/contacts/i18n/hu.po
@@ -3899,6 +3918,7 @@ openerp/addons/email_template/res_partner_demo.yml
 openerp/addons/email_template/res_partner_view.xml
 openerp/addons/email_template/i18n/ar.po
 openerp/addons/email_template/i18n/bg.po
+openerp/addons/email_template/i18n/bs.po
 openerp/addons/email_template/i18n/ca.po
 openerp/addons/email_template/i18n/cs.po
 openerp/addons/email_template/i18n/da.po
@@ -4048,6 +4068,7 @@ openerp/addons/event_moodle/i18n/pt_BR.po
 openerp/addons/event_moodle/i18n/ro.po
 openerp/addons/event_moodle/i18n/ru.po
 openerp/addons/event_moodle/i18n/sl.po
+openerp/addons/event_moodle/i18n/sv.po
 openerp/addons/event_moodle/i18n/tr.po
 openerp/addons/event_moodle/i18n/zh_CN.po
 openerp/addons/event_moodle/images/active_xmlrpc.png
@@ -4065,6 +4086,7 @@ openerp/addons/event_sale/i18n/da.po
 openerp/addons/event_sale/i18n/de.po
 openerp/addons/event_sale/i18n/es.po
 openerp/addons/event_sale/i18n/event_sale.pot
+openerp/addons/event_sale/i18n/fi.po
 openerp/addons/event_sale/i18n/fr.po
 openerp/addons/event_sale/i18n/hr.po
 openerp/addons/event_sale/i18n/hu.po
@@ -4077,6 +4099,7 @@ openerp/addons/event_sale/i18n/pt.po
 openerp/addons/event_sale/i18n/pt_BR.po
 openerp/addons/event_sale/i18n/ro.po
 openerp/addons/event_sale/i18n/sl.po
+openerp/addons/event_sale/i18n/sv.po
 openerp/addons/event_sale/i18n/tr.po
 openerp/addons/event_sale/i18n/zh_CN.po
 openerp/addons/event_sale/test/confirm.yml
@@ -4144,6 +4167,7 @@ openerp/addons/fleet/i18n/da.po
 openerp/addons/fleet/i18n/de.po
 openerp/addons/fleet/i18n/es.po
 openerp/addons/fleet/i18n/es_MX.po
+openerp/addons/fleet/i18n/fi.po
 openerp/addons/fleet/i18n/fleet.pot
 openerp/addons/fleet/i18n/fr.po
 openerp/addons/fleet/i18n/hr.po
@@ -4215,8 +4239,10 @@ openerp/addons/google_docs/i18n/ar.po
 openerp/addons/google_docs/i18n/cs.po
 openerp/addons/google_docs/i18n/de.po
 openerp/addons/google_docs/i18n/es.po
+openerp/addons/google_docs/i18n/fi.po
 openerp/addons/google_docs/i18n/fr.po
 openerp/addons/google_docs/i18n/google_docs.pot
+openerp/addons/google_docs/i18n/hi.po
 openerp/addons/google_docs/i18n/hr.po
 openerp/addons/google_docs/i18n/hu.po
 openerp/addons/google_docs/i18n/it.po
@@ -4248,6 +4274,7 @@ openerp/addons/hr/hr_installer.xml
 openerp/addons/hr/hr_view.xml
 openerp/addons/hr/res_config.py
 openerp/addons/hr/res_config_view.xml
+openerp/addons/hr/i18n/am.po
 openerp/addons/hr/i18n/ar.po
 openerp/addons/hr/i18n/bg.po
 openerp/addons/hr/i18n/bn.po
@@ -4614,6 +4641,7 @@ openerp/addons/hr_holidays/hr_holidays_demo.xml
 openerp/addons/hr_holidays/hr_holidays_report.xml
 openerp/addons/hr_holidays/hr_holidays_view.xml
 openerp/addons/hr_holidays/hr_holidays_workflow.xml
+openerp/addons/hr_holidays/i18n/am.po
 openerp/addons/hr_holidays/i18n/ar.po
 openerp/addons/hr_holidays/i18n/bg.po
 openerp/addons/hr_holidays/i18n/bs.po
@@ -4712,6 +4740,7 @@ openerp/addons/hr_payroll/i18n/es_EC.po
 openerp/addons/hr_payroll/i18n/es_MX.po
 openerp/addons/hr_payroll/i18n/es_VE.po
 openerp/addons/hr_payroll/i18n/et.po
+openerp/addons/hr_payroll/i18n/fa.po
 openerp/addons/hr_payroll/i18n/fi.po
 openerp/addons/hr_payroll/i18n/fr.po
 openerp/addons/hr_payroll/i18n/gl.po
@@ -4844,6 +4873,7 @@ openerp/addons/hr_recruitment/i18n/hu.po
 openerp/addons/hr_recruitment/i18n/id.po
 openerp/addons/hr_recruitment/i18n/it.po
 openerp/addons/hr_recruitment/i18n/ja.po
+openerp/addons/hr_recruitment/i18n/lt.po
 openerp/addons/hr_recruitment/i18n/mk.po
 openerp/addons/hr_recruitment/i18n/mn.po
 openerp/addons/hr_recruitment/i18n/nb.po
@@ -5422,6 +5452,7 @@ openerp/addons/l10n_be_invoice_bba/i18n/pt_BR.po
 openerp/addons/l10n_be_invoice_bba/i18n/sl.po
 openerp/addons/l10n_be_invoice_bba/i18n/sr@latin.po
 openerp/addons/l10n_be_invoice_bba/i18n/tr.po
+openerp/addons/l10n_be_invoice_bba/i18n/zh_CN.po
 openerp/addons/l10n_bo/__init__.py
 openerp/addons/l10n_bo/__openerp__.py
 openerp/addons/l10n_bo/account_tax.xml
@@ -6950,6 +6981,7 @@ openerp/addons/mrp/i18n/sl.po
 openerp/addons/mrp/i18n/sq.po
 openerp/addons/mrp/i18n/sr@latin.po
 openerp/addons/mrp/i18n/sv.po
+openerp/addons/mrp/i18n/th.po
 openerp/addons/mrp/i18n/tlh.po
 openerp/addons/mrp/i18n/tr.po
 openerp/addons/mrp/i18n/uk.po
@@ -6990,6 +7022,7 @@ openerp/addons/mrp/security/mrp_security.xml
 openerp/addons/mrp/static/src/img/icon.png
 openerp/addons/mrp/test/bom_with_service_type_product.yml
 openerp/addons/mrp/test/cancel_order.yml
+openerp/addons/mrp/test/mrp_users.yml
 openerp/addons/mrp/test/order_demo.yml
 openerp/addons/mrp/test/order_process.yml
 openerp/addons/mrp/tests/__init__.py
@@ -7091,6 +7124,7 @@ openerp/addons/mrp_jit/i18n/kab.po
 openerp/addons/mrp_jit/i18n/ko.po
 openerp/addons/mrp_jit/i18n/ko_KO.po
 openerp/addons/mrp_jit/i18n/lt.po
+openerp/addons/mrp_jit/i18n/lv.po
 openerp/addons/mrp_jit/i18n/mk.po
 openerp/addons/mrp_jit/i18n/ml.po
 openerp/addons/mrp_jit/i18n/mn.po
@@ -7250,6 +7284,7 @@ openerp/addons/mrp_repair/test/mrp_repair_report.yml
 openerp/addons/mrp_repair/test/test_mrp_repair_afterinv.yml
 openerp/addons/mrp_repair/test/test_mrp_repair_b4inv.yml
 openerp/addons/mrp_repair/test/test_mrp_repair_cancel.yml
+openerp/addons/mrp_repair/test/test_mrp_repair_fee.yml
 openerp/addons/mrp_repair/test/test_mrp_repair_noneinv.yml
 openerp/addons/mrp_repair/wizard/__init__.py
 openerp/addons/mrp_repair/wizard/cancel_repair.py
@@ -7314,10 +7349,12 @@ openerp/addons/note/note.py
 openerp/addons/note/note_data.xml
 openerp/addons/note/note_demo.xml
 openerp/addons/note/note_view.xml
+openerp/addons/note/i18n/ar.po
 openerp/addons/note/i18n/bs.po
 openerp/addons/note/i18n/cs.po
 openerp/addons/note/i18n/de.po
 openerp/addons/note/i18n/es.po
+openerp/addons/note/i18n/fi.po
 openerp/addons/note/i18n/fr.po
 openerp/addons/note/i18n/hr.po
 openerp/addons/note/i18n/hu.po
@@ -7756,6 +7793,7 @@ openerp/addons/point_of_sale/i18n/sq.po
 openerp/addons/point_of_sale/i18n/sr.po
 openerp/addons/point_of_sale/i18n/sr@latin.po
 openerp/addons/point_of_sale/i18n/sv.po
+openerp/addons/point_of_sale/i18n/th.po
 openerp/addons/point_of_sale/i18n/tlh.po
 openerp/addons/point_of_sale/i18n/tr.po
 openerp/addons/point_of_sale/i18n/uk.po
@@ -7976,6 +8014,7 @@ openerp/addons/portal_anonymous/i18n/en_GB.po
 openerp/addons/portal_anonymous/i18n/es.po
 openerp/addons/portal_anonymous/i18n/fi.po
 openerp/addons/portal_anonymous/i18n/fr.po
+openerp/addons/portal_anonymous/i18n/gl.po
 openerp/addons/portal_anonymous/i18n/hr.po
 openerp/addons/portal_anonymous/i18n/hu.po
 openerp/addons/portal_anonymous/i18n/lt.po
@@ -8034,6 +8073,7 @@ openerp/addons/portal_crm/i18n/fr.po
 openerp/addons/portal_crm/i18n/he.po
 openerp/addons/portal_crm/i18n/hr.po
 openerp/addons/portal_crm/i18n/hu.po
+openerp/addons/portal_crm/i18n/it.po
 openerp/addons/portal_crm/i18n/lt.po
 openerp/addons/portal_crm/i18n/mk.po
 openerp/addons/portal_crm/i18n/nl.po
@@ -8057,6 +8097,7 @@ openerp/addons/portal_event/portal_event_view.xml
 openerp/addons/portal_event/i18n/cs.po
 openerp/addons/portal_event/i18n/de.po
 openerp/addons/portal_event/i18n/es.po
+openerp/addons/portal_event/i18n/fi.po
 openerp/addons/portal_event/i18n/fr.po
 openerp/addons/portal_event/i18n/hr.po
 openerp/addons/portal_event/i18n/hu.po
@@ -8079,6 +8120,7 @@ openerp/addons/portal_hr_employees/hr_employee_view.xml
 openerp/addons/portal_hr_employees/i18n/cs.po
 openerp/addons/portal_hr_employees/i18n/de.po
 openerp/addons/portal_hr_employees/i18n/es.po
+openerp/addons/portal_hr_employees/i18n/fi.po
 openerp/addons/portal_hr_employees/i18n/fr.po
 openerp/addons/portal_hr_employees/i18n/hr.po
 openerp/addons/portal_hr_employees/i18n/hu.po
@@ -8104,6 +8146,7 @@ openerp/addons/portal_project/i18n/ar.po
 openerp/addons/portal_project/i18n/cs.po
 openerp/addons/portal_project/i18n/de.po
 openerp/addons/portal_project/i18n/es.po
+openerp/addons/portal_project/i18n/fi.po
 openerp/addons/portal_project/i18n/fr.po
 openerp/addons/portal_project/i18n/he.po
 openerp/addons/portal_project/i18n/hr.po
@@ -8132,6 +8175,7 @@ openerp/addons/portal_project_issue/i18n/cs.po
 openerp/addons/portal_project_issue/i18n/de.po
 openerp/addons/portal_project_issue/i18n/en_GB.po
 openerp/addons/portal_project_issue/i18n/es.po
+openerp/addons/portal_project_issue/i18n/fi.po
 openerp/addons/portal_project_issue/i18n/fr.po
 openerp/addons/portal_project_issue/i18n/he.po
 openerp/addons/portal_project_issue/i18n/hr.po
@@ -8274,6 +8318,7 @@ openerp/addons/procurement/procurement_view.xml
 openerp/addons/procurement/procurement_workflow.xml
 openerp/addons/procurement/schedulers.py
 openerp/addons/procurement/stock_orderpoint.xml
+openerp/addons/procurement/i18n/am.po
 openerp/addons/procurement/i18n/ar.po
 openerp/addons/procurement/i18n/bg.po
 openerp/addons/procurement/i18n/bs.po
@@ -8419,7 +8464,8 @@ openerp/addons/product/report/product_pricelist.sxw
 openerp/addons/product/security/ir.model.access.csv
 openerp/addons/product/security/product_security.xml
 openerp/addons/product/test/product_pricelist.yml
-openerp/addons/product/test/product_uom.yml
+openerp/addons/product/tests/__init__.py
+openerp/addons/product/tests/test_uom.py
 openerp/addons/product/wizard/__init__.py
 openerp/addons/product/wizard/product_price.py
 openerp/addons/product/wizard/product_price_view.xml
@@ -8428,6 +8474,7 @@ openerp/addons/product_expiry/__openerp__.py
 openerp/addons/product_expiry/product_expiry.py
 openerp/addons/product_expiry/product_expiry_demo.xml
 openerp/addons/product_expiry/product_expiry_view.xml
+openerp/addons/product_expiry/i18n/am.po
 openerp/addons/product_expiry/i18n/ar.po
 openerp/addons/product_expiry/i18n/bs.po
 openerp/addons/product_expiry/i18n/ca.po
@@ -8449,6 +8496,7 @@ openerp/addons/product_expiry/i18n/hr.po
 openerp/addons/product_expiry/i18n/hu.po
 openerp/addons/product_expiry/i18n/it.po
 openerp/addons/product_expiry/i18n/ja.po
+openerp/addons/product_expiry/i18n/lv.po
 openerp/addons/product_expiry/i18n/mk.po
 openerp/addons/product_expiry/i18n/mn.po
 openerp/addons/product_expiry/i18n/nl.po
@@ -8494,6 +8542,7 @@ openerp/addons/product_manufacturer/i18n/hu.po
 openerp/addons/product_manufacturer/i18n/it.po
 openerp/addons/product_manufacturer/i18n/ja.po
 openerp/addons/product_manufacturer/i18n/lt.po
+openerp/addons/product_manufacturer/i18n/lv.po
 openerp/addons/product_manufacturer/i18n/mk.po
 openerp/addons/product_manufacturer/i18n/mn.po
 openerp/addons/product_manufacturer/i18n/nb.po
@@ -8517,6 +8566,7 @@ openerp/addons/product_margin/__init__.py
 openerp/addons/product_margin/__openerp__.py
 openerp/addons/product_margin/product_margin.py
 openerp/addons/product_margin/product_margin_view.xml
+openerp/addons/product_margin/i18n/am.po
 openerp/addons/product_margin/i18n/ar.po
 openerp/addons/product_margin/i18n/bg.po
 openerp/addons/product_margin/i18n/bs.po
@@ -8543,7 +8593,9 @@ openerp/addons/product_margin/i18n/it.po
 openerp/addons/product_margin/i18n/ja.po
 openerp/addons/product_margin/i18n/ko.po
 openerp/addons/product_margin/i18n/lt.po
+openerp/addons/product_margin/i18n/lv.po
 openerp/addons/product_margin/i18n/mk.po
+openerp/addons/product_margin/i18n/mn.po
 openerp/addons/product_margin/i18n/nl.po
 openerp/addons/product_margin/i18n/nl_BE.po
 openerp/addons/product_margin/i18n/pl.po
@@ -8575,6 +8627,7 @@ openerp/addons/product_visible_discount/__init__.py
 openerp/addons/product_visible_discount/__openerp__.py
 openerp/addons/product_visible_discount/product_visible_discount.py
 openerp/addons/product_visible_discount/product_visible_discount_view.xml
+openerp/addons/product_visible_discount/i18n/am.po
 openerp/addons/product_visible_discount/i18n/ar.po
 openerp/addons/product_visible_discount/i18n/bg.po
 openerp/addons/product_visible_discount/i18n/bs.po
@@ -10115,6 +10168,7 @@ openerp/addons/stock/static/src/img/icon.png
 openerp/addons/stock/test/opening_stock.yml
 openerp/addons/stock/test/shipment.yml
 openerp/addons/stock/test/stock_report.yml
+openerp/addons/stock/test/stock_users.yml
 openerp/addons/stock/tests/__init__.py
 openerp/addons/stock/tests/test_multicompany.py
 openerp/addons/stock/wizard/__init__.py
@@ -11774,9 +11828,11 @@ openerp/addons/web_linkedin/__init__.py
 openerp/addons/web_linkedin/__openerp__.py
 openerp/addons/web_linkedin/web_linkedin.py
 openerp/addons/web_linkedin/web_linkedin_view.xml
+openerp/addons/web_linkedin/i18n/ar.po
 openerp/addons/web_linkedin/i18n/cs.po
 openerp/addons/web_linkedin/i18n/de.po
 openerp/addons/web_linkedin/i18n/es.po
+openerp/addons/web_linkedin/i18n/fi.po
 openerp/addons/web_linkedin/i18n/fr.po
 openerp/addons/web_linkedin/i18n/hr.po
 openerp/addons/web_linkedin/i18n/hu.po
@@ -11789,6 +11845,7 @@ openerp/addons/web_linkedin/i18n/pt.po
 openerp/addons/web_linkedin/i18n/pt_BR.po
 openerp/addons/web_linkedin/i18n/ro.po
 openerp/addons/web_linkedin/i18n/sl.po
+openerp/addons/web_linkedin/i18n/sv.po
 openerp/addons/web_linkedin/i18n/tr.po
 openerp/addons/web_linkedin/i18n/web_linkedin.pot
 openerp/addons/web_linkedin/i18n/zh_CN.po
@@ -11810,6 +11867,7 @@ openerp/addons/web_shortcuts/i18n/en_GB.po
 openerp/addons/web_shortcuts/i18n/es.po
 openerp/addons/web_shortcuts/i18n/fi.po
 openerp/addons/web_shortcuts/i18n/fr.po
+openerp/addons/web_shortcuts/i18n/gl.po
 openerp/addons/web_shortcuts/i18n/hr.po
 openerp/addons/web_shortcuts/i18n/hu.po
 openerp/addons/web_shortcuts/i18n/it.po

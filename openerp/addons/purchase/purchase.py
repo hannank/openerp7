@@ -134,10 +134,7 @@ class purchase_order(osv.osv):
     def _invoiced(self, cursor, user, ids, name, arg, context=None):
         res = {}
         for purchase in self.browse(cursor, user, ids, context=context):
-            invoiced = False
-            if purchase.invoiced_rate == 100.00:
-                invoiced = True
-            res[purchase.id] = invoiced
+            res[purchase.id] = all(line.invoiced for line in purchase.order_line)
         return res
     
     def _get_journal(self, cr, uid, context=None):
@@ -244,7 +241,7 @@ class purchase_order(osv.osv):
     _name = "purchase.order"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _description = "Purchase Order"
-    _order = "name desc"
+    _order = 'date_order desc, id desc'
 
     def create(self, cr, uid, vals, context=None):
         if vals.get('name','/')=='/':
@@ -544,7 +541,7 @@ class purchase_order(osv.osv):
                 inv_line_id = inv_line_obj.create(cr, uid, inv_line_data, context=context)
                 inv_lines.append(inv_line_id)
 
-                po_line.write({'invoiced': True, 'invoice_lines': [(4, inv_line_id)]}, context=context)
+                po_line.write({'invoice_lines': [(4, inv_line_id)]}, context=context)
 
             # get invoice data and create invoice
             inv_data = {
@@ -633,10 +630,9 @@ class purchase_order(osv.osv):
             'name': self.pool.get('ir.sequence').get(cr, uid, 'stock.picking.in'),
             'origin': order.name + ((order.origin and (':' + order.origin)) or ''),
             'date': self.date_to_datetime(cr, uid, order.date_order, context),
-            'partner_id': order.dest_address_id.id or order.partner_id.id,
+            'partner_id': order.partner_id.id,
             'invoice_state': '2binvoiced' if order.invoice_method == 'picking' else 'none',
             'type': 'in',
-            'partner_id': order.dest_address_id.id or order.partner_id.id,
             'purchase_id': order.id,
             'company_id': order.company_id.id,
             'move_lines' : [],
@@ -693,7 +689,7 @@ class purchase_order(osv.osv):
                 continue
             if order_line.product_id.type in ('product', 'consu'):
                 move = stock_move.create(cr, uid, self._prepare_order_line_move(cr, uid, order, order_line, picking_id, context=context))
-                if order_line.move_dest_id:
+                if order_line.move_dest_id and order_line.move_dest_id.state != 'done':
                     order_line.move_dest_id.write({'location_id': order.location_id.id})
                 todo_moves.append(move)
         stock_move.action_confirm(cr, uid, todo_moves)
@@ -901,6 +897,15 @@ class purchase_order_line(osv.osv):
             default = {}
         default.update({'state':'draft', 'move_ids':[],'invoiced':0,'invoice_lines':[]})
         return super(purchase_order_line, self).copy_data(cr, uid, id, default, context)
+
+    def unlink(self, cr, uid, ids, context=None):
+        procurement_ids_to_cancel = []
+        for line in self.browse(cr, uid, ids, context=context):
+            if line.move_dest_id:
+                procurement_ids_to_cancel.extend(procurement.id for procurement in line.move_dest_id.procurements)
+        if procurement_ids_to_cancel:
+            self.pool['procurement.order'].action_cancel(cr, uid, procurement_ids_to_cancel)
+        return super(purchase_order_line, self).unlink(cr, uid, ids, context=context)
 
     def onchange_product_uom(self, cr, uid, ids, pricelist_id, product_id, qty, uom_id,
             partner_id, date_order=False, fiscal_position_id=False, date_planned=False,
@@ -1268,5 +1273,29 @@ class mail_compose_message(osv.Model):
             wf_service = netsvc.LocalService("workflow")
             wf_service.trg_validate(uid, 'purchase.order', context['default_res_id'], 'send_rfq', cr)
         return super(mail_compose_message, self).send_mail(cr, uid, ids, context=context)
+
+class account_invoice(osv.Model):
+    _inherit = 'account.invoice'
+    
+    def invoice_validate(self, cr, uid, ids, context=None):
+        res = super(account_invoice, self).invoice_validate(cr, uid, ids, context=context)
+        purchase_order_obj = self.pool.get('purchase.order')
+        # read access on purchase.order object is not required
+        if not purchase_order_obj.check_access_rights(cr, uid, 'read', raise_exception=False):
+            user_id = SUPERUSER_ID
+        else:
+            user_id = uid
+        po_ids = purchase_order_obj.search(cr, user_id, [('invoice_ids', 'in', ids)], context=context)
+        wf_service = netsvc.LocalService("workflow")
+        for order in purchase_order_obj.browse(cr, uid, po_ids, context=context):
+            # Signal purchase order workflow that an invoice has been validated.
+            invoiced = []
+            for po_line in order.order_line:
+                if any(line.invoice_id.state not in ['draft', 'cancel'] for line in po_line.invoice_lines):
+                    invoiced.append(po_line.id)
+            if invoiced:
+                self.pool['purchase.order.line'].write(cr, uid, invoiced, {'invoiced': True})
+            wf_service.trg_write(uid, 'purchase.order', order.id, cr)
+        return res
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

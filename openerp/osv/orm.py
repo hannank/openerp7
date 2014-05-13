@@ -76,7 +76,7 @@ _schema = logging.getLogger(__name__ + '.schema')
 # List of etree._Element subclasses that we choose to ignore when parsing XML.
 from openerp.tools import SKIPPED_ELEMENT_TYPES
 
-regex_order = re.compile('^(([a-z0-9_]+|"[a-z0-9_]+")( *desc| *asc)?( *, *|))+$', re.I)
+regex_order = re.compile('^( *([a-z0-9_]+|"[a-z0-9_]+")( *desc| *asc)?( *, *|))+$', re.I)
 regex_object_name = re.compile(r'^[a-z0-9_.]+$')
 
 # TODO for trunk, raise the value to 1000
@@ -466,7 +466,12 @@ class browse_record(object):
                         else:
                             new_data[field_name] = browse_null()
                     elif field_column._type in ('one2many', 'many2many') and len(result_line[field_name]):
-                        new_data[field_name] = self._list_class([browse_record(self._cr, self._uid, id, self._table.pool.get(field_column._obj), self._cache, context=self._context, list_class=self._list_class, fields_process=self._fields_process) for id in result_line[field_name]], self._context)
+                        new_data[field_name] = self._list_class(
+                            (browse_record(self._cr, self._uid, id, self._table.pool.get(field_column._obj),
+                                           self._cache, context=self._context, list_class=self._list_class,
+                                           fields_process=self._fields_process)
+                               for id in result_line[field_name]),
+                            context=self._context)
                     elif field_column._type == 'reference':
                         if result_line[field_name]:
                             if isinstance(result_line[field_name], browse_record):
@@ -765,8 +770,6 @@ class BaseModel(object):
                     (name_id, context['module'], 'ir.model', model_id)
                 )
 
-        cr.commit()
-
         cr.execute("SELECT * FROM ir_model_fields WHERE model=%s", (self._name,))
         cols = {}
         for rec in cr.dictfetchall():
@@ -834,7 +837,6 @@ class BaseModel(object):
                 for key, val in vals.items():
                     if cols[k][key] != vals[key]:
                         cr.execute('update ir_model_fields set field_description=%s where model=%s and name=%s', (vals['field_description'], vals['model'], vals['name']))
-                        cr.commit()
                         cr.execute("""UPDATE ir_model_fields SET
                             model_id=%s, field_description=%s, ttype=%s, relation=%s,
                             view_load=%s, select_level=%s, readonly=%s ,required=%s, selectable=%s, relation_field=%s, translate=%s, serialization_field_id=%s
@@ -845,7 +847,6 @@ class BaseModel(object):
                                 vals['select_level'], bool(vals['readonly']), bool(vals['required']), bool(vals['selectable']), vals['relation_field'], bool(vals['translate']), vals['serialization_field_id'], vals['model'], vals['name']
                             ))
                         break
-        cr.commit()
 
     #
     # Goal: try to apply inheritance at the instanciation level and
@@ -896,11 +897,6 @@ class BaseModel(object):
                         for c in new.keys():
                             if new[c].manual:
                                 del new[c]
-                        # Duplicate float fields because they have a .digits
-                        # cache (which must be per-registry, not server-wide).
-                        for c in new.keys():
-                            if new[c]._type == 'float':
-                                new[c] = copy.copy(new[c])
                     if hasattr(new, 'update'):
                         new.update(cls.__dict__.get(s, {}))
                     elif s=='_constraints':
@@ -936,6 +932,13 @@ class BaseModel(object):
         if not getattr(cls, '_original_module', None):
             cls._original_module = cls._module
         obj = object.__new__(cls)
+
+        if hasattr(obj, '_columns'):
+            # float fields are registry-dependent (digit attribute). Duplicate them to avoid issues.
+            for c, f in obj._columns.items():
+                if f._type == 'float':
+                    obj._columns[c] = copy.copy(f)
+
         obj.__init__(pool, cr)
         return obj
 
@@ -1121,7 +1124,7 @@ class BaseModel(object):
 
         def _get_xml_id(self, cr, uid, r):
             model_data = self.pool.get('ir.model.data')
-            data_ids = model_data.search(cr, uid, [('model', '=', r._table_name), ('res_id', '=', r['id'])])
+            data_ids = model_data.search(cr, uid, [('model', '=', r._model._name), ('res_id', '=', r['id'])])
             if len(data_ids):
                 d = model_data.read(cr, uid, data_ids, ['name', 'module'])[0]
                 if d['module']:
@@ -1131,13 +1134,13 @@ class BaseModel(object):
             else:
                 postfix = 0
                 while True:
-                    n = self._table+'_'+str(r['id']) + (postfix and ('_'+str(postfix)) or '' )
+                    n = r._model._table+'_'+str(r['id']) + (postfix and ('_'+str(postfix)) or '' )
                     if not model_data.search(cr, uid, [('name', '=', n)]):
                         break
                     postfix += 1
                 model_data.create(cr, SUPERUSER_ID, {
                     'name': n,
-                    'model': self._name,
+                    'model': r._model._name,
                     'res_id': r['id'],
                     'module': '__export__',
                 })
@@ -2597,6 +2600,43 @@ class BaseModel(object):
                 r['__fold'] = folded.get(r[groupby] and r[groupby][0], False)
         return result
 
+    def _read_group_prepare(self, orderby, aggregated_fields, groupby, qualified_groupby_field, query, groupby_type=None):
+        """
+        Prepares the GROUP BY and ORDER BY terms for the read_group method. Adds the missing JOIN clause
+        to the query if order should be computed against m2o field. 
+        :param orderby: the orderby definition in the form "%(field)s %(order)s"
+        :param aggregated_fields: list of aggregated fields in the query
+        :param groupby: the current groupby field name
+        :param qualified_groupby_field: the fully qualified SQL name for the grouped field
+        :param osv.Query query: the query under construction
+        :param groupby_type: the type of the grouped field
+        :return: (groupby_terms, orderby_terms)
+        """
+        orderby_terms = []
+        groupby_terms = [qualified_groupby_field] if groupby else []
+        if not orderby:
+            return groupby_terms, orderby_terms    
+
+        self._check_qorder(orderby)
+        for order_part in orderby.split(','):
+            order_split = order_part.split()
+            order_field = order_split[0]
+            if order_field == groupby:
+                if groupby_type == 'many2one':
+                    order_clause = self._generate_order_by(order_part, query).replace('ORDER BY ', '')
+                    if order_clause:
+                        orderby_terms.append(order_clause)
+                        groupby_terms += [order_term.split()[0] for order_term in order_clause.split(',')]
+                else:
+                    orderby_terms.append(order_part)
+            elif order_field in aggregated_fields:
+                orderby_terms.append(order_part)
+            else:
+                # Cannot order by a field that will not appear in the results (needs to be grouped or aggregated)
+                _logger.warn('%s: read_group order by `%s` ignored, cannot sort on empty columns (not grouped/aggregated)',
+                             self._name, order_part)
+        return groupby_terms, orderby_terms
+
     def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context=None, orderby=False):
         """
         Get the list of records in list view grouped by the given ``groupby`` fields
@@ -2646,19 +2686,16 @@ class BaseModel(object):
 
         # TODO it seems fields_get can be replaced by _all_columns (no need for translation)
         fget = self.fields_get(cr, uid, fields)
-        flist = ''
-        group_count = group_by = groupby
+        select_terms = []
+        groupby_type = None
         if groupby:
             if fget.get(groupby):
                 groupby_type = fget[groupby]['type']
                 if groupby_type in ('date', 'datetime'):
                     qualified_groupby_field = "to_char(%s,'yyyy-mm')" % qualified_groupby_field
-                    flist = "%s as %s " % (qualified_groupby_field, groupby)
                 elif groupby_type == 'boolean':
                     qualified_groupby_field = "coalesce(%s,false)" % qualified_groupby_field
-                    flist = "%s as %s " % (qualified_groupby_field, groupby)
-                else:
-                    flist = qualified_groupby_field
+                select_terms.append("%s as %s " % (qualified_groupby_field, groupby))
             else:
                 # Don't allow arbitrary values, as this would be a SQL injection vector!
                 raise except_orm(_('Invalid group_by'),
@@ -2666,46 +2703,65 @@ class BaseModel(object):
 
         aggregated_fields = [
             f for f in fields
-            if f not in ('id', 'sequence')
+            if f not in ('id', 'sequence', groupby)
             if fget[f]['type'] in ('integer', 'float')
-            if (f in self._columns and getattr(self._columns[f], '_classic_write'))]
+            if (f in self._all_columns and getattr(self._all_columns[f].column, '_classic_write'))]
         for f in aggregated_fields:
             group_operator = fget[f].get('group_operator', 'sum')
-            if flist:
-                flist += ', '
-            qualified_field = '"%s"."%s"' % (self._table, f)
-            flist += "%s(%s) AS %s" % (group_operator, qualified_field, f)
+            qualified_field = self._inherits_join_calc(f, query)
+            select_terms.append("%s(%s) AS %s" % (group_operator, qualified_field, f))
 
-        gb = groupby and (' GROUP BY ' + qualified_groupby_field) or ''
+        order = orderby or groupby or ''
+        groupby_terms, orderby_terms = self._read_group_prepare(order, aggregated_fields, groupby, qualified_groupby_field, query, groupby_type)
 
         from_clause, where_clause, where_clause_params = query.get_sql()
-        where_clause = where_clause and ' WHERE ' + where_clause
-        limit_str = limit and ' limit %d' % limit or ''
-        offset_str = offset and ' offset %d' % offset or ''
         if len(groupby_list) < 2 and context.get('group_by_no_leaf'):
-            group_count = '_'
-        cr.execute('SELECT min(%s.id) AS id, count(%s.id) AS %s_count' % (self._table, self._table, group_count) + (flist and ',') + flist + ' FROM ' + from_clause + where_clause + gb + limit_str + offset_str, where_clause_params)
+            count_field = '_'
+        else:
+            count_field = groupby
+
+        prefix_terms = lambda prefix, terms: (prefix + " " + ",".join(terms)) if terms else ''
+        prefix_term = lambda prefix, term: ('%s %s' % (prefix, term)) if term else ''
+
+        query = """
+            SELECT min(%(table)s.id) AS id, count(%(table)s.id) AS %(count_field)s_count
+                   %(extra_fields)s
+            FROM %(from)s
+            %(where)s
+            %(groupby)s
+            %(orderby)s
+            %(limit)s
+            %(offset)s
+        """ % {
+            'table': self._table,
+            'count_field': count_field,
+            'extra_fields': prefix_terms(',', select_terms),
+            'from': from_clause,
+            'where': prefix_term('WHERE', where_clause),
+            'groupby': prefix_terms('GROUP BY', groupby_terms),
+            'orderby': prefix_terms('ORDER BY', orderby_terms),
+            'limit': prefix_term('LIMIT', int(limit) if limit else None),
+            'offset': prefix_term('OFFSET', int(offset) if limit else None),
+        }
+        cr.execute(query, where_clause_params)
         alldata = {}
-        groupby = group_by
-        for r in cr.dictfetchall():
+        fetched_data = cr.dictfetchall()
+
+        data_ids = []
+        for r in fetched_data:
             for fld, val in r.items():
                 if val is None: r[fld] = False
             alldata[r['id']] = r
+            data_ids.append(r['id'])
             del r['id']
 
-        order = orderby or groupby
-        data_ids = self.search(cr, uid, [('id', 'in', alldata.keys())], order=order, context=context)
-        
-        # the IDs of records that have groupby field value = False or '' should be included too
-        data_ids += set(alldata.keys()).difference(data_ids)
-        
-        if groupby:   
+        if groupby:
             data = self.read(cr, uid, data_ids, [groupby], context=context)
             # restore order of the search as read() uses the default _order (this is only for groups, so the footprint of data should be small):
             data_dict = dict((d['id'], d[groupby] ) for d in data)
             result = [{'id': i, groupby: data_dict[i]} for i in data_ids]
         else:
-            result = [{'id': i} for i in data_ids] 
+            result = [{'id': i} for i in data_ids]
 
         for d in result:
             if groupby:
@@ -3161,7 +3217,7 @@ class BaseModel(object):
                                 msg = "Table '%s': dropping index for column '%s' of type '%s' as it is not required anymore"
                                 _schema.debug(msg, self._table, k, f._type)
 
-                            if isinstance(f, fields.many2one):
+                            if isinstance(f, fields.many2one) or (isinstance(f, fields.function) and f._type == 'many2one' and f.store):
                                 dest_model = self.pool.get(f._obj)
                                 if dest_model._table != 'ir_actions':
                                     self._m2o_fix_foreign_key(cr, self._table, k, dest_model, f.ondelete)
@@ -3196,7 +3252,7 @@ class BaseModel(object):
                                 todo_end.append((order, self._update_store, (f, k)))
 
                             # and add constraints if needed
-                            if isinstance(f, fields.many2one):
+                            if isinstance(f, fields.many2one) or (isinstance(f, fields.function) and f._type == 'many2one' and f.store):
                                 if not self.pool.get(f._obj):
                                     raise except_orm('Programming Error', 'There is no reference available for %s' % (f._obj,))
                                 dest_model = self.pool.get(f._obj)
@@ -4528,7 +4584,7 @@ class BaseModel(object):
         if isinstance(select, (int, long)):
             return browse_record(cr, uid, select, self, cache, context=context, list_class=self._list_class, fields_process=fields_process)
         elif isinstance(select, list):
-            return self._list_class([browse_record(cr, uid, id, self, cache, context=context, list_class=self._list_class, fields_process=fields_process) for id in select], context=context)
+            return self._list_class((browse_record(cr, uid, id, self, cache, context=context, list_class=self._list_class, fields_process=fields_process) for id in select), context=context)
         else:
             return browse_null()
 
@@ -4940,12 +4996,6 @@ class BaseModel(object):
                 else:
                     default['state'] = self._defaults['state']
 
-        data = self.read(cr, uid, [id,], context=context)
-        if data:
-            data = data[0]
-        else:
-            raise IndexError( _("Record #%d of %s not found, cannot copy!") %( id, self._name))
-
         # build a black list of fields that should not be copied
         blacklist = set(MAGIC_COLUMNS + ['parent_left', 'parent_right'])
         def blacklist_given_fields(obj):
@@ -4960,16 +5010,22 @@ class BaseModel(object):
                     blacklist_given_fields(self.pool.get(other))
         blacklist_given_fields(self)
 
+
+        fields_to_copy = dict((f,fi) for f, fi in self._all_columns.iteritems()
+                                     if f not in default
+                                     if f not in blacklist
+                                     if not isinstance(fi.column, fields.function))
+
+        data = self.read(cr, uid, [id], fields_to_copy.keys(), context=context)
+        if data:
+            data = data[0]
+        else:
+            raise IndexError( _("Record #%d of %s not found, cannot copy!") %( id, self._name))
+
         res = dict(default)
-        for f, colinfo in self._all_columns.items():
+        for f, colinfo in fields_to_copy.iteritems():
             field = colinfo.column
-            if f in default:
-                pass
-            elif f in blacklist:
-                pass
-            elif isinstance(field, fields.function):
-                pass
-            elif field._type == 'many2one':
+            if field._type == 'many2one':
                 res[f] = data[f] and data[f][0]
             elif field._type == 'one2many':
                 other = self.pool.get(field._obj)

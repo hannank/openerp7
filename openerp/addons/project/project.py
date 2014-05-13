@@ -288,7 +288,9 @@ class project(osv.osv):
                                         help="The kind of document created when an email is received on this project's email alias"),
         'privacy_visibility': fields.selection(_visibility_selection, 'Privacy / Visibility', required=True),
         'state': fields.selection([('template', 'Template'),('draft','New'),('open','In Progress'), ('cancelled', 'Cancelled'),('pending','Pending'),('close','Closed')], 'Status', required=True,),
-        'doc_count':fields.function(_get_attached_docs, string="Number of documents attached", type='int')
+        'doc_count': fields.function(
+            _get_attached_docs, string="Number of documents attached", type='integer'
+        )
      }
 
     def _get_type_common(self, cr, uid, context):
@@ -368,6 +370,11 @@ class project(osv.osv):
         default['state'] = 'open'
         default['line_ids'] = []
         default['tasks'] = []
+
+        # Don't prepare (expensive) data to copy children (analytic accounts),
+        # they are discarded in analytic.copy(), and handled in duplicate_template() 
+        default['child_ids'] = []
+
         default.pop('alias_name', None)
         default.pop('alias_id', None)
         proj = self.browse(cr, uid, id, context=context)
@@ -704,23 +711,13 @@ class task(base_stage, osv.osv):
         return {}
 
     def duplicate_task(self, cr, uid, map_ids, context=None):
-        for new in map_ids.values():
-            task = self.browse(cr, uid, new, context)
-            child_ids = [ ch.id for ch in task.child_ids]
-            if task.child_ids:
-                for child in task.child_ids:
-                    if child.id in map_ids.keys():
-                        child_ids.remove(child.id)
-                        child_ids.append(map_ids[child.id])
-
-            parent_ids = [ ch.id for ch in task.parent_ids]
-            if task.parent_ids:
-                for parent in task.parent_ids:
-                    if parent.id in map_ids.keys():
-                        parent_ids.remove(parent.id)
-                        parent_ids.append(map_ids[parent.id])
-            #FIXME why there is already the copy and the old one
-            self.write(cr, uid, new, {'parent_ids':[(6,0,set(parent_ids))], 'child_ids':[(6,0, set(child_ids))]})
+        mapper = lambda t: map_ids.get(t.id, t.id)
+        for task in self.browse(cr, uid, map_ids.values(), context):
+            new_child_ids = set(map(mapper, task.child_ids))
+            new_parent_ids = set(map(mapper, task.parent_ids))
+            if new_child_ids or new_parent_ids:
+                task.write({'parent_ids': [(6,0,list(new_parent_ids))],
+                            'child_ids':  [(6,0,list(new_child_ids))]})
 
     def copy_data(self, cr, uid, id, default=None, context=None):
         if default is None:
@@ -742,9 +739,10 @@ class task(base_stage, osv.osv):
             context = {}
         if default is None:
             default = {}
-        stage = self._get_default_stage_id(cr, uid, context=context)
-        if stage:
-            default['stage_id'] = stage
+        if not context.get('copy', False):
+            stage = self._get_default_stage_id(cr, uid, context=context)
+            if stage:
+                default['stage_id'] = stage
         return super(task, self).copy(cr, uid, id, default, context)
 
     def _is_template(self, cr, uid, ids, field_name, arg, context=None):
@@ -768,10 +766,10 @@ class task(base_stage, osv.osv):
         'description': fields.text('Description'),
         'priority': fields.selection([('4','Very Low'), ('3','Low'), ('2','Medium'), ('1','Important'), ('0','Very important')], 'Priority', select=True),
         'sequence': fields.integer('Sequence', select=True, help="Gives the sequence order when displaying a list of tasks."),
-        'stage_id': fields.many2one('project.task.type', 'Stage', track_visibility='onchange',
+        'stage_id': fields.many2one('project.task.type', 'Stage', track_visibility='onchange', select=True,
                         domain="['&', ('fold', '=', False), ('project_ids', '=', project_id)]"),
         'state': fields.related('stage_id', 'state', type="selection", store=True,
-                selection=_TASK_STATE, string="Status", readonly=True,
+                selection=_TASK_STATE, string="Status", readonly=True, select=True,
                 help='The status is set to \'Draft\', when a case is created.\
                       If the case is in progress the status is set to \'Open\'.\
                       When the case is over, the status is set to \'Done\'.\
@@ -790,7 +788,7 @@ class task(base_stage, osv.osv):
         'date_start': fields.datetime('Starting Date',select=True),
         'date_end': fields.datetime('Ending Date',select=True),
         'date_deadline': fields.date('Deadline',select=True),
-        'project_id': fields.many2one('project.project', 'Project', ondelete='set null', select="1", track_visibility='onchange'),
+        'project_id': fields.many2one('project.project', 'Project', ondelete='set null', select=True, track_visibility='onchange'),
         'parent_ids': fields.many2many('project.task', 'project_task_parent_rel', 'task_id', 'parent_id', 'Parent Tasks'),
         'child_ids': fields.many2many('project.task', 'project_task_parent_rel', 'parent_id', 'task_id', 'Delegated Tasks'),
         'notes': fields.text('Notes'),
@@ -816,7 +814,7 @@ class task(base_stage, osv.osv):
                 'project.task': (lambda self, cr, uid, ids, c={}: ids, ['work_ids', 'remaining_hours', 'planned_hours'], 10),
                 'project.task.work': (_get_task, ['hours'], 10),
             }),
-        'user_id': fields.many2one('res.users', 'Assigned to', track_visibility='onchange'),
+        'user_id': fields.many2one('res.users', 'Assigned to', select=True, track_visibility='onchange'),
         'delegated_user_id': fields.related('child_ids', 'user_id', type='many2one', relation='res.users', string='Delegated To'),
         'partner_id': fields.many2one('res.partner', 'Customer'),
         'work_ids': fields.one2many('project.task.work', 'task_id', 'Work done'),

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: openobject-server\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-06-07 19:35+0000\n"
-"PO-Revision-Date: 2013-07-22 14:51+0000\n"
-"Last-Translator: Alle (ADSOFT) <alle@openerp.co.id>\n"
+"PO-Revision-Date: 2014-03-10 19:22+0000\n"
+"Last-Translator: williamlsd <mudy@tdmm.net>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-10-08 06:12+0000\n"
-"X-Generator: Launchpad (build 16799)\n"
+"X-Launchpad-Export-Date: 2014-04-30 06:50+0000\n"
+"X-Generator: Launchpad (build 16985)\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_account_check_writing
@@ -32,7 +32,7 @@ msgstr ""
 #. module: base
 #: view:res.partner.bank:0
 msgid "e.g. GEBABEBB"
-msgstr "misal: GEBABEBB"
+msgstr "contoh: GEBABEBB"
 
 #. module: base
 #: model:res.country,name:base.sh
@@ -63,7 +63,7 @@ msgstr ""
 #: field:ir.ui.view,arch:0
 #: field:ir.ui.view.custom,arch:0
 msgid "View Architecture"
-msgstr "Arsitektur View"
+msgstr "Lihat Arsitektur"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_sale_stock
@@ -91,13 +91,13 @@ msgid ""
 "Helps you manage your projects and tasks by tracking them, generating "
 "plannings, etc..."
 msgstr ""
-"Memungkinkan Anda untuk mengelola proyek dan tugas dengan cara melacaknya, "
-"menghasilkan perencanaan dan lain sebagainya ..."
+"Membantu anda mengelola proyek dan tugas dengan cara melacak, menghasilkan "
+"perencanaan, dan lain sebagainya..."
 
 #. module: base
 #: model:ir.module.module,summary:base.module_point_of_sale
 msgid "Touchscreen Interface for Shops"
-msgstr "Antarmuka layar sentuh untuk digunakan di toko"
+msgstr "Antarmuka Layar Sentuh untuk Toko"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_in_hr_payroll
@@ -109,12 +109,12 @@ msgstr "Payroll untuk India"
 msgid ""
 "Model name on which the method to be called is located, e.g. 'res.partner'."
 msgstr ""
-"Sebutkan nama model yang mana metode ini akan dipanggil, misal 'res.partner'."
+"Nama model dimana terletak metode yang akan dipanggil, contoh 'res.partner'."
 
 #. module: base
 #: view:ir.module.module:0
 msgid "Created Views"
-msgstr "View yang diciptakan"
+msgstr "Tampilan yang Diciptakan"
 
 #. module: base
 #: model:ir.module.module,description:base.module_product_manufacturer
@@ -132,17 +132,17 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"Modul ini berfungsi untuk menambahkan nama produsen beserta atributnya pada "
+"Sebuah modul yang berfungsi menambahkan nama produsen dan keterangan pada "
 "formulir produk.\n"
 "============================================================================="
-"==\n"
+"=====\n"
 "\n"
-"Anda dapat mengisi data-data berikut pada produk:\n"
-"------------------------------------------------\n"
-"* Nama produsen\n"
-"* Nama produk produsen\n"
-"* Code produk produsen\n"
-"* Atribut produk\n"
+"Anda sekarang dapat menentukan data berikut untuk sebuah produk:\n"
+"-------------------------------------------------------------------\n"
+"    * Produsen\n"
+"    * Nama Produk Produsen\n"
+"    * Kode Produk Produsen\n"
+"    * Keterangan Produk\n"
 "    "
 
 #. module: base
@@ -158,8 +158,8 @@ msgid ""
 "========================================\n"
 msgstr ""
 "\n"
-"Modul ini akan menambahkan google user dalam obyek res.user\n"
-"====================================================\n"
+"Modul ini menambahkan pengguna google dalam res user.\n"
+"======================================================\n"
 
 #. module: base
 #: help:res.partner,employee:0
@@ -216,6 +216,15 @@ msgid ""
 "revenue\n"
 "reports."
 msgstr ""
+"\n"
+"Bentuk tagihan anda dari entri Expenses, Timesheet.\n"
+"========================================================\n"
+"\n"
+"Modul untuk menerbitkan tagihan berbasis biaya (sdm, biaya, dsb).\n"
+"\n"
+"Anda dapat mendefinisikan daftar harga pada akun analitik, membuat laporan "
+"anggaran \n"
+"penghasilan."
 
 #. module: base
 #: code:addons/base/ir/ir_sequence.py:134
@@ -325,6 +334,37 @@ msgid ""
 "launchpad:\n"
 " https://launchpad.net/openerp-swiss-localization\n"
 msgstr ""
+"\n"
+" Lokalisasi Swiss :\n"
+" ====================\n"
+" **Multilang swiss STERCHI account chart and taxes**\n"
+"  **Penulis:** Camptocamp SA\n"
+"\n"
+"  **Kontributor finansial:** Prisme Solutions Informatique SA, Quod SA\n"
+"\n"
+"  **Kontributor terjemahan:** brain-tec AG, Agile Business Group\n"
+"\n"
+" **Rilisi ini akan memperkenalkan perubahan besar pada l10n_ch.**\n"
+"\n"
+" Sehubungan dengan kebutuhan refaktoring yang penting, dan adopsi "
+"Switzerland atas strandar pembayaran internasional yang baru selama 2013-"
+"2014. Kami mengorganisasikan addons lokalisasi swiss dengan cara berikut: \n"
+"\n"
+" - **l10n_ch**: Akun multilang swiss STERCHI diagram and pajak (addon "
+"resmi)\n"
+" - **l10n_ch_base_bank**: Modul teknis yang memperkenalkan versi baru dari "
+"manajemen tipe bank yang lebih mudah.\n"
+" - **l10n_ch_bank**: Daftar bank-bank swiss \n"
+" - **l10n_ch_zip**: Daftar kotak pos swiss\n"
+" - **l10n_ch_dta**: Dukungan protokol pembayaran dta (akan diakhiri pada "
+"akhir 2014)\n"
+" - **l10n_ch_payment_slip**: Dukungan slip dan rekonsliasi pembayaran "
+"ESR/BVR. Laporan refaktor dengan penempatan elemen yang mudah.\n"
+" - **l10n_ch_sepa**: Implementasi alfa dari dukungan PostFinance SEPA/PAIN "
+"akan diselesaikan dalam 2013/2014\n"
+"\n"
+" Modul-modul akan tersedia pada lokalisasi Swiss OpenERP pada launchpad: \n"
+" https://launchpad.net/openerp-swiss-localization\n"
 
 #. module: base
 #: model:res.groups,name:base.group_multi_currency
@@ -341,6 +381,12 @@ msgid ""
 "\n"
 "    "
 msgstr ""
+"\n"
+"Lokalisasi skema akunting dan pajak Chili.\n"
+"==============================================\n"
+"Plan contable chileno e impuestos de acuerdo a disposiciones vigentes\n"
+"\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_sale
@@ -440,6 +486,15 @@ msgid ""
 "invoices from picking, OpenERP is able to add and compute the shipping "
 "line.\n"
 msgstr ""
+"\n"
+"Mengizinkan anda untuk menambahkan metode deliveri pada order penjualan dan "
+"pengambilan.\n"
+"==============================================================\n"
+"\n"
+"Anda dapat menentukan carrier sendiri dan metode antar untuk harga tersebut. "
+"Saat membuat\n"
+"tagihan dari pengantaran, OpenERP dapat menambah dan menghitung biaya "
+"pengiriman.\n"
 
 #. module: base
 #: code:addons/base/ir/ir_filters.py:80

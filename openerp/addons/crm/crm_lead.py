@@ -264,10 +264,10 @@ class crm_lead(base_stage, format_address, osv.osv):
         'opt_out': fields.boolean('Opt-Out', oldname='optout',
             help="If opt-out is checked, this contact has refused to receive emails for mass mailing and marketing campaign. "
                     "Filter 'Available for Mass Mailing' allows users to filter the leads when performing mass mailing."),
-        'type':fields.selection([ ('lead','Lead'), ('opportunity','Opportunity'), ],'Type', help="Type is used to separate Leads and Opportunities"),
+        'type': fields.selection([ ('lead','Lead'), ('opportunity','Opportunity'), ],'Type', select=True, help="Type is used to separate Leads and Opportunities"),
         'priority': fields.selection(crm.AVAILABLE_PRIORITIES, 'Priority', select=True),
         'date_closed': fields.datetime('Closed', readonly=True),
-        'stage_id': fields.many2one('crm.case.stage', 'Stage', track_visibility='onchange',
+        'stage_id': fields.many2one('crm.case.stage', 'Stage', track_visibility='onchange', select=True,
                         domain="['&', '&', ('fold', '=', False), ('section_ids', '=', section_id), '|', ('type', '=', type), ('type', '=', 'both')]"),
         'user_id': fields.many2one('res.users', 'Salesperson', select=True, track_visibility='onchange'),
         'referred': fields.char('Referred By', size=64),
@@ -277,7 +277,7 @@ class crm_lead(base_stage, format_address, osv.osv):
         'day_close': fields.function(_compute_day, string='Days to Close', \
                                 multi='day_close', type="float", store=True),
         'state': fields.related('stage_id', 'state', type="selection", store=True,
-                selection=crm.AVAILABLE_STATES, string="Status", readonly=True,
+                selection=crm.AVAILABLE_STATES, string="Status", readonly=True, select=True,
                 help='The Status is set to \'Draft\', when a case is created. If the case is in progress the Status is set to \'Open\'. When the case is over, the Status is set to \'Done\'. If the case needs to be reviewed then the Status is  set to \'Pending\'.'),
 
         # Only used for type opportunity
@@ -339,7 +339,6 @@ class crm_lead(base_stage, format_address, osv.osv):
         return {'value':{'probability': stage.probability}}
 
     def on_change_partner(self, cr, uid, ids, partner_id, context=None):
-        result = {}
         values = {}
         if partner_id:
             partner = self.pool.get('res.partner').browse(cr, uid, partner_id, context=context)
@@ -354,6 +353,7 @@ class crm_lead(base_stage, format_address, osv.osv):
                 'phone' : partner.phone,
                 'mobile' : partner.mobile,
                 'fax' : partner.fax,
+                'zip': partner.zip,
             }
         return {'value' : values}
 
@@ -440,7 +440,7 @@ class crm_lead(base_stage, format_address, osv.osv):
         for lead in self.browse(cr, uid, ids):
             stage_id = self.stage_find(cr, uid, [lead], lead.section_id.id or False, [('probability', '=', 0.0),('on_change','=',True)], context=context)
             if stage_id:
-                self.case_set(cr, uid, [lead.id], values_to_update={'probability': 0.0}, new_stage_id=stage_id, context=context)
+                self.case_set(cr, uid, [lead.id], values_to_update={'probability': 0.0, 'date_closed': fields.datetime.now()}, new_stage_id=stage_id, context=context)
         return True
 
     def case_mark_won(self, cr, uid, ids, context=None):
@@ -448,7 +448,7 @@ class crm_lead(base_stage, format_address, osv.osv):
         for lead in self.browse(cr, uid, ids):
             stage_id = self.stage_find(cr, uid, [lead], lead.section_id.id or False, [('probability', '=', 100.0),('on_change','=',True)], context=context)
             if stage_id:
-                self.case_set(cr, uid, [lead.id], values_to_update={'probability': 100.0}, new_stage_id=stage_id, context=context)
+                self.case_set(cr, uid, [lead.id], values_to_update={'probability': 100.0, 'date_closed': fields.datetime.now()}, new_stage_id=stage_id, context=context)
         return True
 
     def set_priority(self, cr, uid, ids, priority):
@@ -926,11 +926,14 @@ class crm_lead(base_stage, format_address, osv.osv):
         return res
 
     def write(self, cr, uid, ids, vals, context=None):
-        if vals.get('stage_id') and not vals.get('probability'):
-            # change probability of lead(s) if required by stage
+        if vals.get('stage_id'):
             stage = self.pool.get('crm.case.stage').browse(cr, uid, vals['stage_id'], context=context)
-            if stage.on_change:
+            if not vals.get('probability') and stage.on_change:
+                # change probability of lead(s) if required by stage
                 vals['probability'] = stage.probability
+            # set closed date when won or lost
+            if not vals.get('date_closed') and (vals.get('probability', 0) >= 100 or stage.state == 'canceled'):
+                vals['date_closed'] = fields.datetime.now()
         return super(crm_lead, self).write(cr, uid, ids, vals, context=context)
 
     def copy(self, cr, uid, id, default=None, context=None):
