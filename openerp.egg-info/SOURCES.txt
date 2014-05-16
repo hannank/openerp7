@@ -1377,6 +1377,7 @@ openerp/addons/account_test/i18n/account_test.pot
 openerp/addons/account_test/i18n/ar.po
 openerp/addons/account_test/i18n/cs.po
 openerp/addons/account_test/i18n/da.po
+openerp/addons/account_test/i18n/de.po
 openerp/addons/account_test/i18n/en_GB.po
 openerp/addons/account_test/i18n/es.po
 openerp/addons/account_test/i18n/fr.po
@@ -3897,6 +3898,7 @@ openerp/addons/edi/i18n/ro.po
 openerp/addons/edi/i18n/ru.po
 openerp/addons/edi/i18n/sl.po
 openerp/addons/edi/i18n/sv.po
+openerp/addons/edi/i18n/ta.po
 openerp/addons/edi/i18n/tr.po
 openerp/addons/edi/i18n/zh_CN.po
 openerp/addons/edi/i18n/zh_TW.po
@@ -9549,6 +9551,7 @@ openerp/addons/sale/i18n/et.po
 openerp/addons/sale/i18n/eu.po
 openerp/addons/sale/i18n/fi.po
 openerp/addons/sale/i18n/fr.po
+openerp/addons/sale/i18n/fr_CA.po
 openerp/addons/sale/i18n/gl.po
 openerp/addons/sale/i18n/he.po
 openerp/addons/sale/i18n/hi.po
